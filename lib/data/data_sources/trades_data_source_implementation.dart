@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
@@ -68,6 +69,11 @@ class TradesDataSourceImplementation implements TradesDataSource {
         try {
           await _connect();
         } on WebSocketChannelException catch (e) {
+          debugPrint('WebSocket connection error: $e');
+          _isConnected = false;
+          await Future<void>.delayed(_reconnectDelay);
+          continue;
+        } on WebSocketException catch (e) {
           debugPrint('WebSocket connection error: $e');
           _isConnected = false;
           await Future<void>.delayed(_reconnectDelay);

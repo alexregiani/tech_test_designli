@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tech_test_designli/core/custom_exception.dart';
 import 'package:tech_test_designli/domain/entities/trades_real_time_entity.dart';
 import 'package:tech_test_designli/domain/use_cases/real_time_trades_use_case.dart';
 
@@ -36,7 +35,7 @@ class TradesRealTimeBloc
           return state;
         },
       );
-    } on CustomException catch (e) {
+    } catch (e) {
       emit(TradesRealTimeFailureState(error: e.toString()));
     }
   }
