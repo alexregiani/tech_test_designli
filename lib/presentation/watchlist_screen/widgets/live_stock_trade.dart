@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
-import 'package:tech_test_designli/presentation/watchlist_screen/bloc/trades_real_time_bloc.dart';
+import 'package:tech_test_designli/presentation/watchlist_screen/bloc_trades_real_time/trades_real_time_bloc.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/widgets/designly_card.dart';
 
 class LiveStockTrade extends StatefulWidget {
@@ -20,7 +20,6 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
   @override
   void initState() {
     context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
-
     super.initState();
   }
 
@@ -41,14 +40,13 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
       builder: (context, state) {
         if (state is TradesRealTimeSuccessState) {
           final symbol = state.tradesRealTime[widget.symbol];
-
           return DesignlyCard(
             symbol: symbol?.symbol ?? '',
             lastPrice: symbol?.lastPrice ?? 0,
-            percentage: 0,
           );
         } else if (state is TradesRealTimeFailureState) {
           return const Card(
+            margin: EdgeInsets.zero,
             child: Column(
               children: [Text('Error loading')],
             ),
@@ -61,7 +59,6 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
             child: const DesignlyCard(
               symbol: 'AAAAA',
               lastPrice: 111111,
-              percentage: 11111,
             ),
           );
         } else {

@@ -29,19 +29,3 @@ final class TradesRealTimeFailureState extends TradesRealTimeState {
   @override
   List<Object> get props => [error];
 }
-
-final class CompanyStockSuccessState extends TradesRealTimeState {
-  const CompanyStockSuccessState({required this.companyStock});
-
-  final CompanyStockEntity companyStock;
-  @override
-  List<Object> get props => [companyStock];
-}
-
-final class CompanyStockFailureState extends TradesRealTimeState {
-  const CompanyStockFailureState({required this.error});
-
-  final String error;
-  @override
-  List<Object> get props => [error];
-}

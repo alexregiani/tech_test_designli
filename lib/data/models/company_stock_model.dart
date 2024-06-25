@@ -15,14 +15,14 @@ class CompanyStockModel extends CompanyStockEntity {
 
   factory CompanyStockModel.fromJson(JSON json) {
     return CompanyStockModel(
-      currentPrice: json['c'] as double,
-      change: json['d'] as double,
-      percentChange: json['dp'] as double,
-      highPriceDay: json['h'] as double,
-      openPriceDay: json['o'] as double,
-      lowPriceDay: json['l'] as double,
-      previousClosePrice: json['pc'] as double,
-      timestamp: json['t'] as int,
+      currentPrice: (json['c'] as num).toDouble(),
+      change: (json['d'] as num).toDouble(),
+      percentChange: (json['dp'] as num).toDouble(),
+      highPriceDay: (json['h'] as num).toDouble(),
+      openPriceDay: (json['o'] as num).toDouble(),
+      lowPriceDay: (json['l'] as num).toDouble(),
+      previousClosePrice: (json['pc'] as num).toDouble(),
+      timestamp: (json['t'] as num).toInt(),
     );
   }
 }

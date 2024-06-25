@@ -6,12 +6,10 @@ class DesignlyCard extends StatelessWidget {
   const DesignlyCard({
     required this.symbol,
     required this.lastPrice,
-    required this.percentage,
     super.key,
   });
   final String symbol;
   final double lastPrice;
-  final double percentage;
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +33,6 @@ class DesignlyCard extends StatelessWidget {
               style: textTheme.displayLarge
                   ?.copyWith(color: darkBlue, fontSize: 35),
               lastPrice.toString(),
-            ),
-            const Gap(5),
-            Text(
-              style: textTheme.displayMedium
-                  ?.copyWith(fontSize: 20, color: darkBlue),
-              percentage.toString(),
             ),
           ],
         ),

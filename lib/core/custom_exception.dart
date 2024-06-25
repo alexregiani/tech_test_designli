@@ -5,6 +5,6 @@ class CustomException implements Exception {
 
   @override
   String toString() {
-    return 'CustomException{error: $error}';
+    return error;
   }
 }
