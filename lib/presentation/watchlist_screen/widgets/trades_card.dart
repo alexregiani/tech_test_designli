@@ -27,12 +27,12 @@ class _TradesCardState extends State<TradesCard> {
               title: Text('error'),
             ),
           );
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     duration: const Duration(seconds: 3),
-          //     content: Text(state.error),
-          //   ),
-          // );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 3),
+              content: Text(state.error),
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -47,8 +47,9 @@ class _TradesCardState extends State<TradesCard> {
                 ),
                 if (state.tradesRealTime.isNotEmpty)
                   Text(
-                      style: const TextStyle(fontSize: 30),
-                      trades.lastPrice.toString()),
+                    style: const TextStyle(fontSize: 30),
+                    trades.lastPrice.toString(),
+                  ),
               ],
             ),
           );
