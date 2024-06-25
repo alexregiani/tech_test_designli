@@ -50,6 +50,7 @@ class _TradesCardState extends State<TradesCard> {
                     style: const TextStyle(fontSize: 30),
                     trades.lastPrice.toString(),
                   ),
+                const Text('1.47(888.19)'),
               ],
             ),
           );
