@@ -1,5 +1,5 @@
 class CustomException implements Exception {
-  CustomException({required this.error});
+  CustomException(this.error);
 
   final String error;
 

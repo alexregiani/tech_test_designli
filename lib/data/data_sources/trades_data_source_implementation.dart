@@ -5,6 +5,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tech_test_designli/core/configuration_service.dart';
+import 'package:tech_test_designli/core/custom_exception.dart';
+
+import 'package:tech_test_designli/core/dio_exception_handler.dart';
 import 'package:tech_test_designli/core/typedefs.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
 import 'package:tech_test_designli/data/models/single_company_stock_model.dart';
@@ -107,15 +110,13 @@ class TradesDataSourceImplementation implements TradesDataSource {
       final dio = Dio();
       final response = await dio.get<dynamic>(url);
 
-      if (response.statusCode == 200) {
-        final result = SingleCompanyStockModel.fromJson(response.data as JSON);
-        debugPrint(result.toString());
-        return result;
-      } else {
-        throw Exception('Failed to load stock data');
-      }
+      final result = SingleCompanyStockModel.fromJson(response.data as JSON);
+      debugPrint(result.toString());
+      return result;
+    } on DioException catch (e) {
+      throw DioExceptionHandler.handle(e);
     } catch (e) {
-      throw Exception('Error: $e');
+      throw CustomException('An unexpected error occurred: $e');
     }
   }
 }

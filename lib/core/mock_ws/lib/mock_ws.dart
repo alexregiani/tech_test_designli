@@ -42,7 +42,7 @@ void handleWebSocket(WebSocket socket) {
     },
   );
 
-  Timer.periodic(Duration(seconds: 2), (timer) {
+  Timer.periodic(Duration(seconds: 3), (timer) {
     if (subscribedSymbols.isNotEmpty) {
       for (final symbol in subscribedSymbols) {
         final random = Random();
