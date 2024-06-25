@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
@@ -36,17 +37,53 @@ class WatchlistScreen extends StatelessWidget {
               BlocBuilder<CompanyStockBloc, CompanyStockState>(
                 builder: (context, state) {
                   if (state.binanceStatus == CompanyStockStatus.loading) {
-                    return const Skeletonizer(
-                      child: Card(
-                        child: Text('0000'),
+                    return Skeletonizer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          child: Text(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge
+                                  ?.copyWith(
+                                    fontSize: 20,
+                                  ),
+                              '0000000000000'),
+                        ),
                       ),
                     );
                   } else if (state.binanceStatus ==
                       CompanyStockStatus.success) {
-                    final lowPrice = state.binanceStock?.lowPriceDay;
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      child: Text(lowPrice.toString()),
+                    final percentChange =
+                        state.binanceStock?.percentChange ?? 0.0;
+                    final change = state.binanceStock?.change ?? 0.0;
+                    final formattedChange =
+                        formatStockChange(percentChange, change);
+
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                formattedChange,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge
+                                    ?.copyWith(
+                                      color: change >= 0
+                                          ? Colors.green
+                                          : Colors.red,
+                                      fontSize: 15,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     );
                   } else if (state.binanceStatus ==
                       CompanyStockStatus.failure) {
@@ -61,6 +98,7 @@ class WatchlistScreen extends StatelessWidget {
               ),
             ],
           ),
+          const Gap(30),
           Column(
             children: [
               LiveStockTrade(
@@ -69,21 +107,60 @@ class WatchlistScreen extends StatelessWidget {
               BlocBuilder<CompanyStockBloc, CompanyStockState>(
                 builder: (context, state) {
                   if (state.appleStatus == CompanyStockStatus.loading) {
-                    return const Skeletonizer(
-                      child: Card(
-                        child: Text('0000'),
+                    return Skeletonizer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Card(
+                          child: Text(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge
+                                  ?.copyWith(
+                                    fontSize: 20,
+                                  ),
+                              '0000000000000'),
+                        ),
                       ),
                     );
                   } else if (state.appleStatus == CompanyStockStatus.success) {
-                    final lowPrice = state.appleStock?.lowPriceDay;
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      child: Text(lowPrice.toString()),
+                    final percentChange =
+                        state.appleStock?.percentChange ?? 0.0;
+                    final change = state.appleStock?.change ?? 0.0;
+                    final formattedChange =
+                        formatStockChange(percentChange, change);
+
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                formattedChange,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge
+                                    ?.copyWith(
+                                      color: change >= 0
+                                          ? Colors.green
+                                          : Colors.red,
+                                      fontSize: 15,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     );
                   } else if (state.appleStatus == CompanyStockStatus.failure) {
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      child: Text(state.appleError ?? ''),
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        margin: EdgeInsets.zero,
+                        child: Text(state.appleError ?? ''),
+                      ),
                     );
                   } else {
                     return const SizedBox();
@@ -95,5 +172,17 @@ class WatchlistScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String formatStockChange(double percentChange, double change) {
+    final percentChangeStr = percentChange >= 0
+        ? '+${percentChange.toStringAsFixed(2)}'
+        : percentChange.toStringAsFixed(2);
+
+    final changeStr = change >= 0
+        ? '+\$${change.toStringAsFixed(2)}'
+        : '-\$${change.abs().toStringAsFixed(2)}';
+
+    return '$percentChangeStr% ($changeStr)';
   }
 }

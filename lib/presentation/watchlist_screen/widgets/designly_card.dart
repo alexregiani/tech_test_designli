@@ -13,12 +13,11 @@ class DesignlyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final textTheme = Theme.of(context).textTheme;
     const darkBlue = MyColors.designlyDarkBlue;
     return SizedBox(
       height: 100,
-      width: screenWidth,
+      width: double.infinity,
       child: Card(
         elevation: 5,
         child: Padding(
