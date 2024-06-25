@@ -20,6 +20,7 @@ class TradesRealTimeBloc
     Emitter<TradesRealTimeState> emit,
   ) async {
     try {
+      emit(TradesRealTimeLoadingState());
       await emit.forEach(
         realTimeTradesUseCase.tradesRealTime(),
         onData: (trades) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc/trades_real_time_bloc.dart';
 
 class TradesCard extends StatefulWidget {
@@ -21,14 +23,9 @@ class _TradesCardState extends State<TradesCard> {
     return BlocConsumer<TradesRealTimeBloc, TradesRealTimeState>(
       listener: (context, state) {
         if (state is TradesRealTimeFailureState) {
-          showDialog<void>(
-            context: context,
-            builder: (context) => const AlertDialog(
-              title: Text('error'),
-            ),
-          );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              backgroundColor: MyColors.designlyOrange,
               duration: const Duration(seconds: 3),
               content: Text(state.error),
             ),
@@ -56,8 +53,28 @@ class _TradesCardState extends State<TradesCard> {
           );
         } else if (state is TradesRealTimeFailureState) {
           return const Card(
+            elevation: 20,
+            shadowColor: MyColors.designlyOrange,
             child: Column(
               children: [Text('Error')],
+            ),
+          );
+        } else if (state is TradesRealTimeLoadingState) {
+          return const Skeletonizer(
+            child: Card(
+              child: Column(
+                children: [
+                  Text(
+                    'AAAAAA',
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Text(
+                    style: TextStyle(fontSize: 30),
+                    '111111',
+                  ),
+                  Text('1111111'),
+                ],
+              ),
             ),
           );
         } else {
