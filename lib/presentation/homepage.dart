@@ -25,6 +25,9 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyColors.designlyOrange,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -33,9 +36,13 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Watch Screen'),
+              child: const Text(
+                  style: TextStyle(color: Colors.white), 'Watch Screen'),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyColors.designlyOrange,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -44,9 +51,13 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Alert Screen'),
+              child: const Text(
+                  style: TextStyle(color: Colors.white), 'Alert Screen'),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyColors.designlyOrange,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -55,7 +66,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Graph Screen'),
+              child: const Text(
+                  style: TextStyle(color: Colors.white), 'Graph Screen'),
             )
           ],
         ),
