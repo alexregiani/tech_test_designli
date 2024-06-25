@@ -1,5 +1,5 @@
-class SingleCompanyStockEntity {
-  SingleCompanyStockEntity({
+class CompanyStockEntity {
+  CompanyStockEntity({
     required this.currentPrice,
     required this.change,
     required this.percentChange,
@@ -21,7 +21,7 @@ class SingleCompanyStockEntity {
 
   @override
   String toString() {
-    return 'SingleCompanyStockEntity{currentPrice: $currentPrice, change: '
+    return 'CompanyStockEntity{currentPrice: $currentPrice, change: '
         ' $change, percentChange: $percentChange, highPriceDay: $highPriceDay,'
         ' openPriceDay: $openPriceDay, lowPriceDay: '
         ' $lowPriceDay, previousClosePrice:'

@@ -6,7 +6,10 @@ import 'package:tech_test_designli/presentation/watchlist_screen/bloc/trades_rea
 import 'package:tech_test_designli/presentation/watchlist_screen/widgets/designly_card.dart';
 
 class LiveStockTrade extends StatefulWidget {
-  const LiveStockTrade({required this.symbol, super.key});
+  const LiveStockTrade({
+    required this.symbol,
+    super.key,
+  });
   final String symbol;
 
   @override
@@ -17,6 +20,7 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
   @override
   void initState() {
     context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
+
     super.initState();
   }
 
@@ -41,7 +45,7 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
           return DesignlyCard(
             symbol: symbol?.symbol ?? '',
             lastPrice: symbol?.lastPrice ?? 0,
-            percentage: 2.24,
+            percentage: 0,
           );
         } else if (state is TradesRealTimeFailureState) {
           return const Card(
@@ -49,7 +53,7 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
               children: [Text('Error loading')],
             ),
           );
-        } else if (state is TradesRealTimeLoadingState) {
+        } else if (state is TradesLoadingState) {
           return Skeletonizer(
             effect: ShimmerEffect(
               baseColor: Colors.grey.withOpacity(0.1),

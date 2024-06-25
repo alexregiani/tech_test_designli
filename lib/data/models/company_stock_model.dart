@@ -1,8 +1,8 @@
 import 'package:tech_test_designli/core/typedefs.dart';
-import 'package:tech_test_designli/domain/entities/single_company_stock_entity.dart';
+import 'package:tech_test_designli/domain/entities/company_stock_entity.dart';
 
-class SingleCompanyStockModel extends SingleCompanyStockEntity {
-  SingleCompanyStockModel({
+class CompanyStockModel extends CompanyStockEntity {
+  CompanyStockModel({
     required super.currentPrice,
     required super.change,
     required super.percentChange,
@@ -13,8 +13,8 @@ class SingleCompanyStockModel extends SingleCompanyStockEntity {
     required super.timestamp,
   });
 
-  factory SingleCompanyStockModel.fromJson(JSON json) {
-    return SingleCompanyStockModel(
+  factory CompanyStockModel.fromJson(JSON json) {
+    return CompanyStockModel(
       currentPrice: json['c'] as double,
       change: json['d'] as double,
       percentChange: json['dp'] as double,

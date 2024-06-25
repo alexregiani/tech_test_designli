@@ -6,12 +6,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tech_test_designli/core/configuration_service.dart';
 import 'package:tech_test_designli/core/custom_exception.dart';
-
 import 'package:tech_test_designli/core/dio_exception_handler.dart';
 import 'package:tech_test_designli/core/typedefs.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
-import 'package:tech_test_designli/data/models/single_company_stock_model.dart';
+import 'package:tech_test_designli/data/models/company_stock_model.dart';
 import 'package:tech_test_designli/data/models/trades_real_time_model.dart';
+import 'package:tech_test_designli/domain/use_cases/stock_company_use_case.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TradesDataSourceImplementation implements TradesDataSource {
@@ -102,15 +102,17 @@ class TradesDataSourceImplementation implements TradesDataSource {
   }
 
   @override
-  Future<SingleCompanyStockModel> stockCompanyNetwork() async {
-    const url =
-        'https://finnhub.io/api/v1/quote?symbol=AAPL&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+  Future<CompanyStockModel> stockCompanyNetwork({
+    required ParamsStockCompany params,
+  }) async {
+    final url =
+        'https://finnhub.io/api/v1/quote?symbol=${params.symbol}&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
 
     try {
       final dio = Dio();
       final response = await dio.get<dynamic>(url);
 
-      final result = SingleCompanyStockModel.fromJson(response.data as JSON);
+      final result = CompanyStockModel.fromJson(response.data as JSON);
       debugPrint(result.toString());
       return result;
     } on DioException catch (e) {

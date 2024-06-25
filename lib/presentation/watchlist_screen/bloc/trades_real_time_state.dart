@@ -9,7 +9,7 @@ final class TradesRealTimeInitialState extends TradesRealTimeState {
   List<Object> get props => [];
 }
 
-final class TradesRealTimeLoadingState extends TradesRealTimeState {
+final class TradesLoadingState extends TradesRealTimeState {
   @override
   List<Object> get props => [];
 }
@@ -24,6 +24,22 @@ final class TradesRealTimeSuccessState extends TradesRealTimeState {
 
 final class TradesRealTimeFailureState extends TradesRealTimeState {
   const TradesRealTimeFailureState({required this.error});
+
+  final String error;
+  @override
+  List<Object> get props => [error];
+}
+
+final class CompanyStockSuccessState extends TradesRealTimeState {
+  const CompanyStockSuccessState({required this.companyStock});
+
+  final CompanyStockEntity companyStock;
+  @override
+  List<Object> get props => [companyStock];
+}
+
+final class CompanyStockFailureState extends TradesRealTimeState {
+  const CompanyStockFailureState({required this.error});
 
   final String error;
   @override
