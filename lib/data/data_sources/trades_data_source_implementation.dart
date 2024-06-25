@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tech_test_designli/core/typedefs.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
+import 'package:tech_test_designli/data/models/single_company_stock_model.dart';
 import 'package:tech_test_designli/data/models/trades_real_time_model.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 //
@@ -121,5 +124,26 @@ class TradesDataSourceImplementation implements TradesDataSource {
   void dispose() {
     _channel?.sink.close();
     _isConnected = false;
+  }
+
+  @override
+  Future<SingleCompanyStockModel> stockCompanyNetwork() async {
+    const url =
+        'https://finnhub.io/api/v1/quote?symbol=AAPL&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+
+    try {
+      final dio = Dio();
+      final response = await dio.get<void>(url);
+
+      if (response.statusCode == 200) {
+        final result = SingleCompanyStockModel.fromJson(response.data as JSON);
+        debugPrint(result.toString());
+        return result;
+      } else {
+        throw Exception('Failed to load stock data');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
   }
 }
