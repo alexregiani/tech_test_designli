@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
-import 'package:tech_test_designli/presentation/watchlist_screen/widgets/trades_card.dart';
+import 'package:tech_test_designli/presentation/watchlist_screen/widgets/live_stock_trade.dart';
 
 class WatchlistScreen extends StatelessWidget {
   const WatchlistScreen({super.key});
@@ -24,20 +24,20 @@ class WatchlistScreen extends StatelessWidget {
           Text('Real time trade'),
           Row(
             children: [
-              Expanded(child: TradesCard()),
-              Expanded(child: TradesCard()),
+              Expanded(child: LiveStockTrade()),
+              Expanded(child: LiveStockTrade()),
             ],
           ),
           Row(
             children: [
-              Expanded(child: TradesCard()),
-              Expanded(child: TradesCard()),
+              Expanded(child: LiveStockTrade()),
+              Expanded(child: LiveStockTrade()),
             ],
           ),
           Row(
             children: [
-              Expanded(child: TradesCard()),
-              Expanded(child: TradesCard()),
+              Expanded(child: LiveStockTrade()),
+              Expanded(child: LiveStockTrade()),
             ],
           ),
         ],

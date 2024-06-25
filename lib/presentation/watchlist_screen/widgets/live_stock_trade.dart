@@ -5,14 +5,14 @@ import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc/trades_real_time_bloc.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/widgets/designly_card.dart';
 
-class TradesCard extends StatefulWidget {
-  const TradesCard({super.key});
+class LiveStockTrade extends StatefulWidget {
+  const LiveStockTrade({super.key});
 
   @override
-  State<TradesCard> createState() => _TradesCardState();
+  State<LiveStockTrade> createState() => _LiveStockTradeState();
 }
 
-class _TradesCardState extends State<TradesCard> {
+class _LiveStockTradeState extends State<LiveStockTrade> {
   @override
   void initState() {
     context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
