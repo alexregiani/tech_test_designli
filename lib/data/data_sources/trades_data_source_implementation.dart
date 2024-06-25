@@ -17,9 +17,19 @@ class TradesDataSourceImplementation implements TradesDataSource {
   WebSocketChannel? _channel;
   final Duration _reconnectDelay = const Duration(seconds: 5);
   bool _isConnected = false;
+  late StreamController<Map<String, TradesRealTimeModel>> _streamController;
 
   @override
-  Stream<List<TradesRealTimeModel>> tradesRealTimeNetwork() async* {
+  Stream<Map<String, TradesRealTimeModel>> tradesRealTimeNetwork() {
+    _streamController =
+        StreamController<Map<String, TradesRealTimeModel>>.broadcast();
+    _startListening();
+    return _streamController.stream;
+  }
+
+  Future<void> _startListening() async {
+    final tradesMap = <String, TradesRealTimeModel>{};
+
     while (true) {
       if (!_isConnected) {
         try {
@@ -55,7 +65,11 @@ class TradesDataSourceImplementation implements TradesDataSource {
                   ),
                 )
                 .toList();
-            yield trades;
+
+            for (final trade in trades) {
+              tradesMap[trade.symbol] = trade;
+            }
+            _streamController.add(tradesMap);
           }
         }
       } catch (e) {
@@ -74,11 +88,14 @@ class TradesDataSourceImplementation implements TradesDataSource {
     _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'AAPL'}));
     _channel!.sink
         .add(jsonEncode({'type': 'subscribe', 'symbol': 'BINANCE:BTCUSDT'}));
+    _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'MSFT'}));
+    _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'AMZN'}));
   }
 
   void dispose() {
     _channel?.sink.close();
     _isConnected = false;
+    _streamController.close();
   }
 
   @override

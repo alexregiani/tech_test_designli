@@ -17,7 +17,7 @@ final class TradesRealTimeLoadingState extends TradesRealTimeState {
 final class TradesRealTimeSuccessState extends TradesRealTimeState {
   const TradesRealTimeSuccessState({required this.tradesRealTime});
 
-  final List<TradesRealTimeEntity> tradesRealTime;
+  final Map<String, TradesRealTimeEntity> tradesRealTime;
   @override
   List<Object> get props => [tradesRealTime];
 }

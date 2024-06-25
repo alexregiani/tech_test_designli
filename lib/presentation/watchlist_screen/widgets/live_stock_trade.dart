@@ -6,7 +6,8 @@ import 'package:tech_test_designli/presentation/watchlist_screen/bloc/trades_rea
 import 'package:tech_test_designli/presentation/watchlist_screen/widgets/designly_card.dart';
 
 class LiveStockTrade extends StatefulWidget {
-  const LiveStockTrade({super.key});
+  const LiveStockTrade({required this.symbol, super.key});
+  final String symbol;
 
   @override
   State<LiveStockTrade> createState() => _LiveStockTradeState();
@@ -35,10 +36,11 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
       },
       builder: (context, state) {
         if (state is TradesRealTimeSuccessState) {
-          final trades = state.tradesRealTime.last;
+          final symbol = state.tradesRealTime[widget.symbol];
+
           return DesignlyCard(
-            symbol: trades.symbol,
-            lastPrice: trades.lastPrice,
+            symbol: symbol?.symbol ?? '',
+            lastPrice: symbol?.lastPrice ?? 0,
             percentage: 2.24,
           );
         } else if (state is TradesRealTimeFailureState) {
@@ -50,7 +52,7 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
         } else if (state is TradesRealTimeLoadingState) {
           return Skeletonizer(
             effect: ShimmerEffect(
-              baseColor: MyColors.designlyOrange.withOpacity(0.3),
+              baseColor: Colors.grey.withOpacity(0.1),
             ),
             child: const DesignlyCard(
               symbol: 'AAAAA',

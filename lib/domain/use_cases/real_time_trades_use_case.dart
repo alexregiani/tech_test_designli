@@ -6,7 +6,7 @@ class RealTimeTradesUseCase {
 
   final TradesRepository tradesRepository;
 
-  Stream<List<TradesRealTimeEntity>> tradesRealTime() {
+  Stream<Map<String, TradesRealTimeEntity>> tradesRealTime() {
     return tradesRepository.tradesRealTime();
   }
 }

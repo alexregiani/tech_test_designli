@@ -9,7 +9,7 @@ class TradesRepositoryImplementation implements TradesRepository {
 
   final TradesDataSource tradesDataSource;
   @override
-  Stream<List<TradesRealTimeEntity>> tradesRealTime() {
+  Stream<Map<String, TradesRealTimeEntity>> tradesRealTime() {
     return tradesDataSource.tradesRealTimeNetwork();
   }
 }

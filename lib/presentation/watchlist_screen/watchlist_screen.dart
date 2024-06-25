@@ -24,20 +24,29 @@ class WatchlistScreen extends StatelessWidget {
           Text('Real time trade'),
           Row(
             children: [
-              Expanded(child: LiveStockTrade()),
-              Expanded(child: LiveStockTrade()),
+              Expanded(
+                child: LiveStockTrade(
+                  symbol: 'BINANCE:BTCUSDT',
+                ),
+              ),
+              Expanded(
+                child: LiveStockTrade(
+                  symbol: 'AAPL',
+                ),
+              ),
             ],
           ),
           Row(
             children: [
-              Expanded(child: LiveStockTrade()),
-              Expanded(child: LiveStockTrade()),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(child: LiveStockTrade()),
-              Expanded(child: LiveStockTrade()),
+              Expanded(
+                  child: LiveStockTrade(
+                symbol: 'AMZN',
+              )),
+              Expanded(
+                child: LiveStockTrade(
+                  symbol: 'MSFT',
+                ),
+              ),
             ],
           ),
         ],
