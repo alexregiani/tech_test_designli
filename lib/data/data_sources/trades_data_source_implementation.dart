@@ -25,12 +25,12 @@ class TradesDataSourceImplementation implements TradesDataSource {
         try {
           await _connect();
         } on WebSocketChannelException catch (e) {
-          debugPrint('WebSocket connection error: $e');
+          debugPrint('webSocket channel exception $e');
           _isConnected = false;
           await Future<void>.delayed(_reconnectDelay);
           continue;
         } on WebSocketException catch (e) {
-          debugPrint('WebSocket connection error: $e');
+          debugPrint('WebSocket exception: $e');
           _isConnected = false;
           await Future<void>.delayed(_reconnectDelay);
           continue;
@@ -72,6 +72,8 @@ class TradesDataSourceImplementation implements TradesDataSource {
     _isConnected = true;
     debugPrint('Connected to WebSocket');
     _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'AAPL'}));
+    _channel!.sink
+        .add(jsonEncode({'type': 'subscribe', 'symbol': 'BINANCE:BTCUSDT'}));
   }
 
   void dispose() {
