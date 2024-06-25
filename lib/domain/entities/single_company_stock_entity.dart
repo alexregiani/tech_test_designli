@@ -22,8 +22,9 @@ class SingleCompanyStockEntity {
   @override
   String toString() {
     return 'SingleCompanyStockEntity{currentPrice: $currentPrice, change: '
-        '$change, percentChange: $percentChange, highPriceDay: $highPriceDay,'
-        'openPriceDay: $openPriceDay, lowPriceDay: $lowPriceDay, previousClosePrice:'
+        ' $change, percentChange: $percentChange, highPriceDay: $highPriceDay,'
+        ' openPriceDay: $openPriceDay, lowPriceDay: '
+        ' $lowPriceDay, previousClosePrice:'
         ' $previousClosePrice, timestamp: $timestamp}';
   }
 }
