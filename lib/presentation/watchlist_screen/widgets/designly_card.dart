@@ -13,28 +13,33 @@ class DesignlyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     final textTheme = Theme.of(context).textTheme;
     const darkBlue = MyColors.designlyDarkBlue;
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              textAlign: TextAlign.center,
-              symbol,
-              style: textTheme.displayMedium
-                  ?.copyWith(fontSize: 17, color: darkBlue),
-            ),
-            const Gap(5),
-            Text(
-              style: textTheme.displayLarge
-                  ?.copyWith(color: darkBlue, fontSize: 35),
-              lastPrice.toString(),
-            ),
-          ],
+    return SizedBox(
+      height: 100,
+      width: screenWidth,
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                textAlign: TextAlign.center,
+                symbol,
+                style: textTheme.displayMedium
+                    ?.copyWith(fontSize: 17, color: darkBlue),
+              ),
+              const Gap(5),
+              Text(
+                style: textTheme.displayLarge
+                    ?.copyWith(color: darkBlue, fontSize: 35),
+                lastPrice.toString(),
+              ),
+            ],
+          ),
         ),
       ),
     );

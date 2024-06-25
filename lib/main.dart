@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => sl<TradesRealTimeBloc>()),
           BlocProvider(
             create: (context) => sl<CompanyStockBloc>(),
-          )
+          ),
         ],
         child: const WatchlistScreen(),
       ),

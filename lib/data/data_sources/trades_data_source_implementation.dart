@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:tech_test_designli/core/configuration_service.dart';
 import 'package:tech_test_designli/core/custom_exception.dart';
 import 'package:tech_test_designli/core/dio_exception_handler.dart';
+import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/core/typedefs.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
 import 'package:tech_test_designli/data/models/company_stock_model.dart';
@@ -88,11 +89,30 @@ class TradesDataSourceImplementation implements TradesDataSource {
     await _channel!.ready;
     _isConnected = true;
     debugPrint('Connected to WebSocket');
-    _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'AAPL'}));
-    _channel!.sink
-        .add(jsonEncode({'type': 'subscribe', 'symbol': 'BINANCE:BTCUSDT'}));
-    _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'MSFT'}));
-    _channel!.sink.add(jsonEncode({'type': 'subscribe', 'symbol': 'AMZN'}));
+    _channel!.sink.add(
+      jsonEncode(
+        {'type': 'subscribe', 'symbol': StocksSymbol.apple.symbol},
+      ),
+    );
+    _channel!.sink.add(
+      jsonEncode(
+        {
+          'type': 'subscribe',
+          'symbol': StocksSymbol.binance.symbol,
+        },
+      ),
+    );
+    _channel!.sink.add(
+      jsonEncode({
+        'type': 'subscribe',
+        'symbol': StocksSymbol.microsoft.symbol,
+      }),
+    );
+    _channel!.sink.add(
+      jsonEncode(
+        {'type': 'subscribe', 'symbol': StocksSymbol.amazon.symbol},
+      ),
+    );
   }
 
   void dispose() {

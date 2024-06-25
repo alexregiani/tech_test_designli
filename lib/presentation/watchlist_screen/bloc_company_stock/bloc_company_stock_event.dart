@@ -4,10 +4,12 @@ sealed class CompanyStockEvent extends Equatable {
   const CompanyStockEvent();
 }
 
-final class CompanyStockTriggerEvent extends CompanyStockEvent {
-  const CompanyStockTriggerEvent({required this.symbol});
-
-  final String symbol;
+final class AppleStockTriggerEvent extends CompanyStockEvent {
   @override
-  List<Object> get props => [symbol];
+  List<Object> get props => [];
+}
+
+final class BinanceStockTriggerEvent extends CompanyStockEvent {
+  @override
+  List<Object> get props => [];
 }
