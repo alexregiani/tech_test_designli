@@ -19,11 +19,10 @@ class GraphScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-            style: Theme.of(context)
-                .textTheme
-                .displayLarge
-                ?.copyWith(fontSize: 25),
-            'Graph Screen'),
+          style:
+              Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 25),
+          'Graph Screen',
+        ),
         backgroundColor: MyColors.designlyOrange,
       ),
       backgroundColor: MyColors.designlyDarkBlue,

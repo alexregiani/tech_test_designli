@@ -102,17 +102,6 @@ class TradesDataSourceImplementation implements TradesDataSource {
         },
       ),
     );
-    _channel!.sink.add(
-      jsonEncode({
-        'type': 'subscribe',
-        'symbol': StocksSymbol.microsoft.symbol,
-      }),
-    );
-    _channel!.sink.add(
-      jsonEncode(
-        {'type': 'subscribe', 'symbol': StocksSymbol.amazon.symbol},
-      ),
-    );
   }
 
   void dispose() {

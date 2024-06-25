@@ -37,7 +37,9 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text(
-                  style: TextStyle(color: Colors.white), 'Watch Screen'),
+                style: TextStyle(color: Colors.white),
+                'Watch Screen',
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -52,7 +54,9 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text(
-                  style: TextStyle(color: Colors.white), 'Alert Screen'),
+                style: TextStyle(color: Colors.white),
+                'Alert Screen',
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -67,8 +71,10 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text(
-                  style: TextStyle(color: Colors.white), 'Graph Screen'),
-            )
+                style: TextStyle(color: Colors.white),
+                'Graph Screen',
+              ),
+            ),
           ],
         ),
       ),
