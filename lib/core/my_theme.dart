@@ -15,7 +15,7 @@ class MyTheme {
       displayMedium: montserrat.copyWith(
         fontFamily: montserratFont,
         fontSize: 20,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
       ),
       displaySmall: montserrat.copyWith(
         fontFamily: montserratFont,

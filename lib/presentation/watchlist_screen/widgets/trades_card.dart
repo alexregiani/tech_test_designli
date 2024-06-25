@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc/trades_real_time_bloc.dart';
+import 'package:tech_test_designli/presentation/watchlist_screen/widgets/designly_card.dart';
 
 class TradesCard extends StatefulWidget {
   const TradesCard({super.key});
@@ -35,46 +36,26 @@ class _TradesCardState extends State<TradesCard> {
       builder: (context, state) {
         if (state is TradesRealTimeSuccessState) {
           final trades = state.tradesRealTime.last;
-          return Card(
-            child: Column(
-              children: [
-                Text(
-                  trades.symbol,
-                  style: const TextStyle(fontSize: 30),
-                ),
-                if (state.tradesRealTime.isNotEmpty)
-                  Text(
-                    style: const TextStyle(fontSize: 30),
-                    trades.lastPrice.toString(),
-                  ),
-                const Text('1.47(888.19)'),
-              ],
-            ),
+          return DesignlyCard(
+            symbol: trades.symbol,
+            lastPrice: trades.lastPrice,
+            percentage: 2.24,
           );
         } else if (state is TradesRealTimeFailureState) {
           return const Card(
-            elevation: 20,
-            shadowColor: MyColors.designlyOrange,
             child: Column(
-              children: [Text('Error')],
+              children: [Text('Error loading')],
             ),
           );
         } else if (state is TradesRealTimeLoadingState) {
-          return const Skeletonizer(
-            child: Card(
-              child: Column(
-                children: [
-                  Text(
-                    'AAAAAA',
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  Text(
-                    style: TextStyle(fontSize: 30),
-                    '111111',
-                  ),
-                  Text('1111111'),
-                ],
-              ),
+          return Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: MyColors.designlyOrange.withOpacity(0.3),
+            ),
+            child: const DesignlyCard(
+              symbol: 'AAAAA',
+              lastPrice: 111111,
+              percentage: 11111,
             ),
           );
         } else {
