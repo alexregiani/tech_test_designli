@@ -32,12 +32,12 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => const WatchListProviderWrapper(),
+                    builder: (context) => const WatchlistScreen(),
                   ),
                 );
               },
               child: const Text(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: MyColors.designlyDarkBlue),
                 'Watch Screen',
               ),
             ),
@@ -49,12 +49,12 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => const AddAlertProviderWrapper(),
+                    builder: (context) => const AddAlertScreen(),
                   ),
                 );
               },
               child: const Text(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: MyColors.designlyDarkBlue),
                 'Alert Screen',
               ),
             ),
@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text(
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: MyColors.designlyDarkBlue),
                 'Graph Screen',
               ),
             ),

@@ -1,12 +1,21 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
+import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
+import 'package:tech_test_designli/presentation/add_alert_screen/bloc/add_alert_bloc.dart';
 
 class AddAlertProviderWrapper extends StatelessWidget {
   const AddAlertProviderWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const AddAlertScreen();
+    final addAlertBloc = context.read<AddAlertBloc>();
+    return BlocProvider.value(
+      value: addAlertBloc,
+      child: const AddAlertScreen(),
+    );
   }
 }
 
@@ -46,8 +55,8 @@ class StockAlertFormState extends State<StockAlertForm> {
   double? _alertPrice;
 
   final List<String> _stocks = [
-    'Apple',
-    'Binance',
+    StocksSymbol.apple.symbol,
+    StocksSymbol.binance.symbol,
   ];
 
   void _showAlert() {
@@ -71,7 +80,12 @@ class StockAlertFormState extends State<StockAlertForm> {
               TextButton(
                 child: const Text('Confirm'),
                 onPressed: () {
-                  // TODO(AlexRegiani): trigger event bloc
+                  BlocProvider.of<AddAlertBloc>(context).add(
+                    AddAlertTriggerEvent(
+                      symbol: _selectedStock!,
+                      alertPrice: _alertPrice!,
+                    ),
+                  );
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Alert set successfully!')),
@@ -137,8 +151,14 @@ class StockAlertFormState extends State<StockAlertForm> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.designlyOrange,
+                ),
                 onPressed: _showAlert,
-                child: const Text('Set Alert'),
+                child: const Text(
+                  style: TextStyle(color: MyColors.designlyDarkBlue),
+                  'Set Alert',
+                ),
               ),
             ],
           ),
