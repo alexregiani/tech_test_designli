@@ -1,16 +1,31 @@
-# tech_test_designli
+# Tech Test Designli, by Alex Regiani.
 
-A new Flutter project.
+## Features
+- Three main screens:
+    1. Watch Screen: Cards with real-time trades.
+    2. Graph Screen: A line chart representing stock performance over time.
+    3. Alert Screen: Set alerts when a stock reaches a certain price.
+
+## Architecture
+This project follows Clean Architecture principles, promoting separation of concerns and maintainability:
+
+- Presentation Layer: Flutter UI and BLoC for state management
+- Domain Layer: Business logic and use cases
+- Data Layer: Data sources and repositories
+
+## State Management
+BLoC pattern is used for state management, ensuring a reactive and efficient app structure.
+
+## Navigation
+Fully working with go_router
+
+## Networking
+it implements both WebSocket and traditional http.
 
 ## Getting Started
+I have created a mock Web Socket Server for testing purposes
+- follow these steps:
+    1. Open the terminal and run mock_ws.dart located at lib/core/mock_ws/lib/mock_ws.dart 
+    2. Run the app on the AVD (tested on Pixel 8 API 34)
+    3. Have fun :)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
