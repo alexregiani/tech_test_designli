@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:tech_test_designli/presentation/graph_screen/widgets/chart_colors.dart';
+import 'package:tech_test_designli/core/my_theme.dart';
 
 class MyLineChart extends StatelessWidget {
   const MyLineChart({
@@ -63,7 +63,7 @@ class MyLineChart extends StatelessWidget {
   List<LineChartBarData> get lineBarsData => [
         LineChartBarData(
           isCurved: true,
-          color: AppColors.contentColorGreen,
+          color: MyColors.designlyDarkBlue,
           barWidth: 8,
           isStrokeCapRound: true,
           dotData: const FlDotData(show: false),
@@ -132,8 +132,10 @@ class MyLineChart extends StatelessWidget {
   FlBorderData get borderData => FlBorderData(
         show: true,
         border: Border(
-          bottom:
-              BorderSide(color: AppColors.primary.withOpacity(0.2), width: 4),
+          bottom: BorderSide(
+            color: MyColors.designlyDarkBlue.withOpacity(0.2),
+            width: 4,
+          ),
           left: const BorderSide(color: Colors.transparent),
           right: const BorderSide(color: Colors.transparent),
           top: const BorderSide(color: Colors.transparent),
@@ -173,7 +175,7 @@ class LineChartSample1State extends State<LineChartSample1> {
               const Text(
                 'Yearly Sales',
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: MyColors.designlyDarkBlue,
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,

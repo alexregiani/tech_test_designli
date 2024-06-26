@@ -16,6 +16,13 @@ class TradesRealTimeBloc
     on<TradesRealTimeTriggerEvent>(_onGetTradesRealTime);
     on<SetAlertEvent>(_onSetAlert);
   }
+
+  final RealTimeTradesUseCase realTimeTradesUseCase;
+  final Map<String, double> _alerts = {};
+  int _errorCount = 0;
+  static const int _errorThreshold = 3;
+  Map<String, TradesRealTimeEntity> _currentTrades = {};
+
   Future<void> _onGetTradesRealTime(
     TradesRealTimeTriggerEvent event,
     Emitter<TradesRealTimeState> emit,
@@ -26,23 +33,9 @@ class TradesRealTimeBloc
         realTimeTradesUseCase.tradesRealTime(),
         onData: (Map<String, TradesRealTimeEntity> trades) {
           _errorCount = 0;
+          _currentTrades = trades;
 
-          // Check for triggered alerts
-          for (final entry in _alerts.entries) {
-            final symbol = entry.key;
-            final alertPrice = entry.value;
-            if (trades.containsKey(symbol) &&
-                trades[symbol]!.lastPrice >= alertPrice) {
-              emit(
-                AlertTriggeredState(
-                  alertPrice: alertPrice,
-                  symbol: symbol,
-                  triggerPrice: trades[symbol]!.lastPrice,
-                ),
-              );
-              _alerts.remove(symbol);
-            }
-          }
+          _checkAlerts(emit);
 
           return TradesRealTimeSuccessState(tradesRealTime: trades);
         },
@@ -61,11 +54,36 @@ class TradesRealTimeBloc
 
   void _onSetAlert(SetAlertEvent event, Emitter<TradesRealTimeState> emit) {
     _alerts[event.symbol] = event.alertPrice;
-    emit(AlertSetState(symbol: event.symbol, alertPrice: event.alertPrice));
+
+    if (_currentTrades.containsKey(event.symbol) &&
+        _currentTrades[event.symbol]!.lastPrice == event.alertPrice) {
+      emit(AlertSetState(symbol: event.symbol, alertPrice: event.alertPrice));
+      emit(
+        AlertTriggeredState(
+          alertPrice: event.alertPrice,
+          symbol: event.symbol,
+          triggerPrice: _currentTrades[event.symbol]!.lastPrice,
+        ),
+      );
+      _alerts.remove(event.symbol);
+    }
   }
 
-  final RealTimeTradesUseCase realTimeTradesUseCase;
-  final Map<String, double> _alerts = {};
-  int _errorCount = 0;
-  static const int _errorThreshold = 3;
+  void _checkAlerts(Emitter<TradesRealTimeState> emit) {
+    for (final entry in _alerts.entries) {
+      final symbol = entry.key;
+      final alertPrice = entry.value;
+      if (_currentTrades.containsKey(symbol) &&
+          _currentTrades[symbol]!.lastPrice >= alertPrice) {
+        emit(
+          AlertTriggeredState(
+            alertPrice: alertPrice,
+            symbol: symbol,
+            triggerPrice: _currentTrades[symbol]!.lastPrice,
+          ),
+        );
+        _alerts.remove(symbol);
+      }
+    }
+  }
 }

@@ -14,10 +14,23 @@ void main() async {
   }
 }
 
+Map<String, int> globalPrices = {};
+Timer? globalTimer;
+
+void startGlobalPriceUpdates() {
+  globalTimer?.cancel();
+  globalTimer = Timer.periodic(
+    Duration(seconds: 3),
+    (timer) {
+      for (final symbol in globalPrices.keys) {
+        globalPrices[symbol] = (globalPrices[symbol] ?? 0) + 50;
+      }
+    },
+  );
+}
+
 void handleWebSocket(WebSocket socket) {
-  print('Client connected');
   Set<String> subscribedSymbols = {};
-  Map<String, double> prices = {};
 
   socket.listen(
     (message) {
@@ -27,9 +40,11 @@ void handleWebSocket(WebSocket socket) {
         if (decoded is Map &&
             decoded['type'] == 'subscribe' &&
             decoded['symbol'] != null) {
-          subscribedSymbols.add(decoded['symbol']);
-          prices[decoded['symbol']] = 50; // Start from 150
-          print('Subscribed to: ${decoded['symbol']}');
+          final symbol = decoded['symbol'];
+          subscribedSymbols.add(symbol);
+          if (!globalPrices.containsKey(symbol)) {
+            globalPrices[symbol] = 50;
+          }
         }
       } catch (e) {
         print('Error processing message: $e');
@@ -39,25 +54,32 @@ void handleWebSocket(WebSocket socket) {
     onError: (error) => print('Error: $error'),
   );
 
-  Timer.periodic(Duration(seconds: 3), (timer) {
-    for (final symbol in subscribedSymbols) {
-      prices[symbol] = (prices[symbol] ?? 150.0) + 30.0; // Increase by 30
+  if (globalTimer == null || !globalTimer!.isActive) {
+    startGlobalPriceUpdates();
+  }
 
-      final data = {
-        "data": [
-          {
-            "p": prices[symbol]!,
-            "s": symbol,
-            "t": DateTime.now().millisecondsSinceEpoch,
-            "v": 100.0,
-            "c": ["1", "2"]
-          }
-        ],
-        "type": "trade"
-      };
+  Timer.periodic(
+    Duration(seconds: 3),
+    (timer) {
+      for (final symbol in subscribedSymbols) {
+        final price = globalPrices[symbol] ?? 50;
 
-      socket.add(jsonEncode(data));
-      print('Sent: ${jsonEncode(data)}');
-    }
-  });
+        final data = {
+          "data": [
+            {
+              "p": price,
+              "s": symbol,
+              "t": DateTime.now().millisecondsSinceEpoch,
+              "v": 100.0,
+              "c": ["1", "2"]
+            }
+          ],
+          "type": "trade"
+        };
+
+        socket.add(jsonEncode(data));
+        print('Sent: ${jsonEncode(data)}');
+      }
+    },
+  );
 }

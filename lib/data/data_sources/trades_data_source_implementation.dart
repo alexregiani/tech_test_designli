@@ -99,10 +99,7 @@ class TradesDataSourceImplementation implements TradesDataSource {
     );
     _channel!.sink.add(
       jsonEncode(
-        {
-          'type': 'subscribe',
-          'symbol': StocksSymbol.binance.symbol,
-        },
+        {'type': 'subscribe', 'symbol': StocksSymbol.binance.symbol},
       ),
     );
   }

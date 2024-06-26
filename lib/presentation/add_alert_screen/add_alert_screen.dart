@@ -13,6 +13,7 @@ class AddAlertScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -42,12 +43,6 @@ class StockAlertForm extends StatefulWidget {
 }
 
 class StockAlertFormState extends State<StockAlertForm> {
-  @override
-  void initState() {
-    // context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
-    super.initState();
-  }
-
   final _formKey = GlobalKey<FormState>();
   String? _selectedStock;
   double? _alertPrice;
@@ -101,7 +96,7 @@ class StockAlertFormState extends State<StockAlertForm> {
   Widget build(BuildContext context) {
     return BlocListener<TradesRealTimeBloc, TradesRealTimeState>(
       listener: (context, state) {
-        if (state is AlertSetState) {
+        if (state is AlertTriggeredState) {
           final symbol = state.symbol;
           final alertPrice = state.alertPrice;
           ScaffoldMessenger.of(context).showSnackBar(

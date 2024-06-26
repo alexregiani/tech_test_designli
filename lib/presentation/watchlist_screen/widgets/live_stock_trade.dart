@@ -19,6 +19,8 @@ class LiveStockTrade extends StatefulWidget {
 class _LiveStockTradeState extends State<LiveStockTrade> {
   @override
   void initState() {
+    context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
+
     super.initState();
   }
 
@@ -56,12 +58,20 @@ class _LiveStockTradeState extends State<LiveStockTrade> {
               baseColor: Colors.grey.withOpacity(0.1),
             ),
             child: const DesignlyCard(
-              symbol: 'AAAAA',
+              symbol: 'AAAAAAA',
               lastPrice: 111111,
             ),
           );
         } else {
-          return const SizedBox();
+          return Skeletonizer(
+            effect: ShimmerEffect(
+              baseColor: Colors.grey.withOpacity(0.1),
+            ),
+            child: const DesignlyCard(
+              symbol: 'AAAAAAA',
+              lastPrice: 111111,
+            ),
+          );
         }
       },
     );
