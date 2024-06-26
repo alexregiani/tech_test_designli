@@ -3,93 +3,73 @@ import 'package:flutter/material.dart';
 import 'package:tech_test_designli/presentation/graph_screen/widgets/chart_colors.dart';
 
 class MyLineChart extends StatelessWidget {
-  const MyLineChart({required this.isShowingMainData, super.key});
+  const MyLineChart({
+    required this.isShowingMainData,
+    required this.spots,
+    super.key,
+  });
 
   final bool isShowingMainData;
+  final List<FlSpot> spots;
 
   @override
   Widget build(BuildContext context) {
     return LineChart(
-      isShowingMainData ? sampleData1 : sampleData2,
+      sampleData,
       duration: const Duration(milliseconds: 250),
     );
   }
 
-  LineChartData get sampleData1 => LineChartData(
-        lineTouchData: lineTouchData1,
+  LineChartData get sampleData => LineChartData(
+        lineTouchData: lineTouchData,
         gridData: gridData,
-        titlesData: titlesData1,
+        titlesData: titlesData,
         borderData: borderData,
-        lineBarsData: lineBarsData1,
-        minX: 0,
-        maxX: 6,
-        maxY: 4,
-        minY: 0,
+        lineBarsData: lineBarsData,
+        minX: spots.isNotEmpty ? spots.first.x : 1985,
+        maxX: spots.isNotEmpty ? spots.last.x : 2023,
+        maxY: spots.isNotEmpty
+            ? spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b)
+            : 4,
+        minY: spots.isNotEmpty
+            ? spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b)
+            : 0,
       );
 
-  LineChartData get sampleData2 => LineChartData(
-        lineTouchData: lineTouchData2,
-        gridData: gridData,
-        titlesData: titlesData2,
-        borderData: borderData,
-        lineBarsData: lineBarsData2,
-        minX: 0,
-        maxX: 6,
-        maxY: 6,
-        minY: 0,
-      );
-
-  LineTouchData get lineTouchData1 => LineTouchData(
-        handleBuiltInTouches: true,
+  LineTouchData get lineTouchData => LineTouchData(
         touchTooltipData: LineTouchTooltipData(
-          getTooltipColor: (touchedSpot) => Colors.blueGrey.withOpacity(0.8),
+          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+            return touchedSpots.map((touchedSpot) {
+              return LineTooltipItem(
+                '${touchedSpot.x.toInt()}, ${touchedSpot.y}',
+                const TextStyle(color: Colors.white),
+              );
+            }).toList();
+          },
         ),
       );
 
-  FlTitlesData get titlesData1 => FlTitlesData(
+  FlTitlesData get titlesData => FlTitlesData(
         bottomTitles: AxisTitles(
           sideTitles: bottomTitles,
         ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        rightTitles: const AxisTitles(),
+        topTitles: const AxisTitles(),
         leftTitles: AxisTitles(
           sideTitles: leftTitles(),
         ),
       );
 
-  List<LineChartBarData> get lineBarsData1 => [
-        lineChartBarData1_1,
-        lineChartBarData1_2,
-        lineChartBarData1_3,
-      ];
-
-  LineTouchData get lineTouchData2 => const LineTouchData(
-        enabled: false,
-      );
-
-  FlTitlesData get titlesData2 => FlTitlesData(
-        bottomTitles: AxisTitles(
-          sideTitles: bottomTitles,
+  List<LineChartBarData> get lineBarsData => [
+        LineChartBarData(
+          isCurved: true,
+          color: AppColors.contentColorGreen,
+          barWidth: 8,
+          isStrokeCapRound: true,
+          dotData: const FlDotData(show: false),
+          belowBarData: BarAreaData(),
+          spots: spots,
         ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: leftTitles(),
-        ),
-      );
-
-  List<LineChartBarData> get lineBarsData2 => [
-        lineChartBarData2_1,
-        lineChartBarData2_2,
-        lineChartBarData2_3,
       ];
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
@@ -97,28 +77,20 @@ class MyLineChart extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    String text;
-    switch (value.toInt()) {
-      case 1:
-        text = '1m';
-        break;
-      case 2:
-        text = '2m';
-        break;
-      case 3:
-        text = '3m';
-        break;
-      case 4:
-        text = '5m';
-        break;
-      case 5:
-        text = '6m';
-        break;
-      default:
-        return Container();
+
+    if (spots.isEmpty) {
+      return Container();
     }
 
-    return Text(text, style: style, textAlign: TextAlign.center);
+    final minY = spots.map((spot) => spot.y).reduce((a, b) => a < b ? a : b);
+    final maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b);
+    final range = maxY - minY;
+
+    final currentValue = minY + (value / 5) * range;
+
+    final formattedValue = currentValue.toStringAsFixed(1);
+
+    return Text(formattedValue, style: style, textAlign: TextAlign.center);
   }
 
   SideTitles leftTitles() => SideTitles(
@@ -131,28 +103,14 @@ class MyLineChart extends StatelessWidget {
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
-      fontSize: 16,
+      fontSize: 10,
     );
     Widget text;
-    switch (value.toInt()) {
-      case 1:
-        text = const Text('2018', style: style);
-        break;
-      case 2:
-        text = const Text('2019', style: style);
-        break;
-      case 3:
-        text = const Text('2020', style: style);
-        break;
-      case 4:
-        text = const Text('2021', style: style);
-        break;
-      case 5:
-        text = const Text('2022', style: style);
-        break;
-      default:
-        text = const Text('');
-        break;
+
+    if (value.toInt() % 5 == 0 || value.toInt() == 2023) {
+      text = Text('${value.toInt()}', style: style);
+    } else {
+      text = const Text('');
     }
 
     return SideTitleWidget(
@@ -181,114 +139,6 @@ class MyLineChart extends StatelessWidget {
           top: const BorderSide(color: Colors.transparent),
         ),
       );
-
-  LineChartBarData get lineChartBarData1_1 => LineChartBarData(
-        isCurved: true,
-        color: AppColors.contentColorGreen,
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(2, 1.5),
-          FlSpot(3, 1.4),
-          FlSpot(4, 3.4),
-          FlSpot(5, 2),
-          FlSpot(6, 2.2),
-        ],
-      );
-
-  LineChartBarData get lineChartBarData1_2 => LineChartBarData(
-        isCurved: true,
-        color: AppColors.contentColorPink,
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(
-          show: false,
-          color: AppColors.contentColorPink.withOpacity(0),
-        ),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(2, 2.8),
-          FlSpot(3, 1.2),
-          FlSpot(4, 2.8),
-          FlSpot(5, 2.6),
-          FlSpot(6, 3.9),
-        ],
-      );
-
-  LineChartBarData get lineChartBarData1_3 => LineChartBarData(
-        isCurved: true,
-        color: AppColors.contentColorCyan,
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 2.8),
-          FlSpot(2, 1.9),
-          FlSpot(3, 3),
-          FlSpot(4, 1.3),
-          FlSpot(5, 2.5),
-        ],
-      );
-
-  LineChartBarData get lineChartBarData2_1 => LineChartBarData(
-        isCurved: true,
-        curveSmoothness: 0,
-        color: AppColors.contentColorGreen.withOpacity(0.5),
-        barWidth: 4,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(2, 4),
-          FlSpot(3, 1.8),
-          FlSpot(4, 5),
-          FlSpot(5, 2),
-          FlSpot(6, 2.2),
-        ],
-      );
-
-  LineChartBarData get lineChartBarData2_2 => LineChartBarData(
-        isCurved: true,
-        color: AppColors.contentColorPink.withOpacity(0.5),
-        barWidth: 4,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: false),
-        belowBarData: BarAreaData(
-          show: true,
-          color: AppColors.contentColorPink.withOpacity(0.2),
-        ),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(2, 2.8),
-          FlSpot(3, 1.2),
-          FlSpot(4, 2.8),
-          FlSpot(5, 2.6),
-          FlSpot(6, 3.9),
-        ],
-      );
-
-  LineChartBarData get lineChartBarData2_3 => LineChartBarData(
-        isCurved: true,
-        curveSmoothness: 0,
-        color: AppColors.contentColorCyan.withOpacity(0.5),
-        barWidth: 2,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(show: true),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 3.8),
-          FlSpot(2, 1.9),
-          FlSpot(3, 5),
-          FlSpot(4, 3.3),
-          FlSpot(5, 4.5),
-        ],
-      );
 }
 
 class LineChartSample1 extends StatefulWidget {
@@ -300,6 +150,7 @@ class LineChartSample1 extends StatefulWidget {
 
 class LineChartSample1State extends State<LineChartSample1> {
   late bool isShowingMainData;
+  List<FlSpot> spots = [];
 
   @override
   void initState() {
@@ -335,7 +186,10 @@ class LineChartSample1State extends State<LineChartSample1> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, left: 6),
-                  child: MyLineChart(isShowingMainData: isShowingMainData),
+                  child: MyLineChart(
+                    isShowingMainData: isShowingMainData,
+                    spots: spots,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -353,7 +207,7 @@ class LineChartSample1State extends State<LineChartSample1> {
                 isShowingMainData = !isShowingMainData;
               });
             },
-          )
+          ),
         ],
       ),
     );

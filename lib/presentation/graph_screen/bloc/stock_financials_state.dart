@@ -15,11 +15,11 @@ final class StockFinancialsLoadingState extends GraphState {
 }
 
 final class StockFinancialsSuccessState extends GraphState {
-  const StockFinancialsSuccessState({required this.basicFinancial});
+  const StockFinancialsSuccessState({required this.stockFlSpots});
 
-  final BasicFinancialsEntity basicFinancial;
+  final List<FlSpot> stockFlSpots;
   @override
-  List<Object> get props => [basicFinancial];
+  List<Object> get props => [stockFlSpots];
 }
 
 final class StockFinancialsFailureState extends GraphState {

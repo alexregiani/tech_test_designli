@@ -1,10 +1,11 @@
 class EpsEntity {
-  EpsEntity({required this.period});
+  EpsEntity({required this.period, required this.value});
 
   final String period;
+  final double value;
 
   @override
   String toString() {
-    return 'Eps{period: $period}';
+    return 'EpsEntity{period: $period, value: $value}';
   }
 }

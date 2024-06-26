@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
+import 'package:tech_test_designli/presentation/graph_screen/bloc/stock_financials_bloc.dart';
 import 'package:tech_test_designli/presentation/graph_screen/widgets/line_chart.dart';
 
 class GraphScreenProviderWrapper extends StatelessWidget {
@@ -18,6 +21,7 @@ class GraphScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<StockFinancialsBloc>().add(StockFinancialsTriggerEvent());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,11 +37,30 @@ class GraphScreen extends StatelessWidget {
         backgroundColor: MyColors.designlyOrange,
       ),
       body: Center(
-        child: SizedBox(
-          height: 300,
-          child: MyLineChart(
-            isShowingMainData: true,
-          ),
+        child: Column(
+          children: [
+            const Gap(50),
+            const Text('Earnings per Share AAPL'),
+            SizedBox(
+              height: 300,
+              child: BlocBuilder<StockFinancialsBloc, GraphState>(
+                builder: (context, state) {
+                  if (state is StockFinancialsSuccessState) {
+                    final appleFlSpots = state.stockFlSpots;
+                    return SizedBox(
+                      width: 380,
+                      child: MyLineChart(
+                        spots: appleFlSpots,
+                        isShowingMainData: true,
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
