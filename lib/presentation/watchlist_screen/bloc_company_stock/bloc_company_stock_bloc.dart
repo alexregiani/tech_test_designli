@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:tech_test_designli/core/dio_exception_handler.dart';
 import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/domain/entities/company_stock_entity.dart';
 import 'package:tech_test_designli/domain/use_cases/stock_company_use_case.dart';
@@ -65,16 +66,17 @@ class CompanyStockBloc extends Bloc<CompanyStockEvent, CompanyStockState> {
         ),
       );
     } on DioException catch (e) {
+      final customException = DioExceptionHandler.handle(e);
       emit(
         state.copyWith(
-          binanceError: e.toString(),
+          binanceError: customException.error,
           binanceStatus: CompanyStockStatus.failure,
         ),
       );
     } catch (e) {
       emit(
         state.copyWith(
-          binanceError: e.toString(),
+          binanceError: 'An unexpected error occurred: $e',
           binanceStatus: CompanyStockStatus.failure,
         ),
       );

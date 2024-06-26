@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:tech_test_designli/core/dio_exception_handler.dart';
 import 'package:tech_test_designli/domain/entities/graph/entities/eps_entity.dart';
 import 'package:tech_test_designli/domain/use_cases/stock_financials_use_case.dart';
 
@@ -19,19 +21,27 @@ class StockFinancialsBloc extends Bloc<StockFinancialsEvent, GraphState> {
   ) async {
     emit(StockFinancialsLoadingState());
 
-    final result = await stockFinancialsUseCase.stockFinancials(
-      ParamsStockFinancials(
-        symbol: 'AAPL',
-      ),
-    );
-    final eps = result.series.annual.eps;
-    final convert = transformEpsDataToSpots(eps);
+    try {
+      final result = await stockFinancialsUseCase.stockFinancials(
+        ParamsStockFinancials(
+          symbol: 'AAPL',
+        ),
+      );
+      final eps = result.series.annual.eps;
+      final convert = transformEpsDataToSpots(eps);
 
-    emit(
-      StockFinancialsSuccessState(
-        stockFlSpots: convert,
-      ),
-    );
+      emit(
+        StockFinancialsSuccessState(
+          stockFlSpots: convert,
+        ),
+      );
+    } on DioException catch (e) {
+      final customException = DioExceptionHandler.handle(e);
+      emit(StockFinancialsFailureState(error: customException.error));
+    } catch (e) {
+      emit(StockFinancialsFailureState(
+          error: 'An unexpected error occurred: $e'));
+    }
   }
 
   List<FlSpot> transformEpsDataToSpots(List<EpsEntity> epsData) {

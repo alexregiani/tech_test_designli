@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/presentation/graph_screen/bloc/stock_financials_bloc.dart';
@@ -54,6 +55,13 @@ class GraphScreen extends StatelessWidget {
                         isShowingMainData: true,
                       ),
                     );
+                  } else if (state is StockFinancialsFailureState) {
+                    return const Text(
+                      'Failed to load graph',
+                      style: TextStyle(color: Colors.black),
+                    );
+                  } else if (state is StockFinancialsLoadingState) {
+                    return const Center(child: CircularProgressIndicator());
                   } else {
                     return const SizedBox();
                   }

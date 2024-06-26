@@ -23,6 +23,9 @@ final class StockFinancialsSuccessState extends GraphState {
 }
 
 final class StockFinancialsFailureState extends GraphState {
+  const StockFinancialsFailureState({required this.error});
+
+  final String error;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [error];
 }
