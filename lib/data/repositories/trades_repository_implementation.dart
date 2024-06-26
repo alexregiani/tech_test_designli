@@ -25,8 +25,9 @@ class TradesRepositoryImplementation implements TradesRepository {
   }
 
   @override
-  Future<BasicFinancialsEntity> fetchStockFinancials(
-      {required ParamsStockFinancials params}) {
+  Future<BasicFinancialsEntity> fetchStockFinancials({
+    required ParamsStockFinancials params,
+  }) {
     return tradesDataSource.fetchStockFinancialsNetwork(params: params);
   }
 }

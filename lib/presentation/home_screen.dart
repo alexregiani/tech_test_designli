@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
-import 'package:tech_test_designli/presentation/add_alert_screen/add_alert_screen.dart';
-import 'package:tech_test_designli/presentation/graph_screen/graph_screen.dart';
-import 'package:tech_test_designli/presentation/watchlist_screen/watchlist_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,12 +28,7 @@ class HomeScreen extends StatelessWidget {
                 backgroundColor: MyColors.designlyOrange,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => const WatchlistScreen(),
-                  ),
-                );
+                context.goNamed(Navigation.watchListScreen.name);
               },
               child: const Text(
                 style: TextStyle(color: MyColors.designlyDarkBlue),
@@ -46,12 +40,7 @@ class HomeScreen extends StatelessWidget {
                 backgroundColor: MyColors.designlyOrange,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => const AddAlertScreen(),
-                  ),
-                );
+                context.goNamed(Navigation.alertScreen.name);
               },
               child: const Text(
                 style: TextStyle(color: MyColors.designlyDarkBlue),
@@ -63,12 +52,7 @@ class HomeScreen extends StatelessWidget {
                 backgroundColor: MyColors.designlyOrange,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => const GraphScreenProviderWrapper(),
-                  ),
-                );
+                context.goNamed(Navigation.graphScreen.name);
               },
               child: const Text(
                 style: TextStyle(color: MyColors.designlyDarkBlue),

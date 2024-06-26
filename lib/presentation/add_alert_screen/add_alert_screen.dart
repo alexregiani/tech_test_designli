@@ -2,23 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/presentation/add_alert_screen/bloc/add_alert_bloc.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc_trades_real_time/trades_real_time_bloc.dart';
-
-class AddAlertProviderWrapper extends StatelessWidget {
-  const AddAlertProviderWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final addAlertBloc = context.read<AddAlertBloc>();
-    return BlocProvider.value(
-      value: addAlertBloc,
-      child: const AddAlertScreen(),
-    );
-  }
-}
 
 class AddAlertScreen extends StatelessWidget {
   const AddAlertScreen({super.key});
@@ -29,11 +18,15 @@ class AddAlertScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
+          'Add Alert',
           style:
               Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 25),
-          'Add Alert',
         ),
         backgroundColor: MyColors.designlyOrange,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.goNamed(Navigation.homeScreen.name),
+        ),
       ),
       backgroundColor: MyColors.designlyDarkBlue,
       body: const Column(
@@ -107,66 +100,82 @@ class StockAlertFormState extends State<StockAlertForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Set Stock Alert'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              DropdownButtonFormField<String>(
-                value: _selectedStock,
-                decoration: const InputDecoration(labelText: 'Select Stock'),
-                items: _stocks.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedStock = newValue;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a stock';
-                  }
-                  return null;
-                },
+    return BlocListener<AddAlertBloc, AddAlertState>(
+      listener: (context, state) {
+        if (state is AddAlertTriggeredState) {
+          final symbol = state.symbol;
+          final alertPrice = state.alertPrice;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: const Duration(seconds: 5),
+              content: Text(
+                'Your alert for the $symbol stock has reached $alertPrice',
               ),
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Alert Price'),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an alert price';
-                  }
-                  if (double.tryParse(value) == null) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _alertPrice = double.parse(value!);
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: MyColors.designlyOrange,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Set Stock Alert'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                DropdownButtonFormField<String>(
+                  value: _selectedStock,
+                  decoration: const InputDecoration(labelText: 'Select Stock'),
+                  items: _stocks.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedStock = newValue;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a stock';
+                    }
+                    return null;
+                  },
                 ),
-                onPressed: _showAlert,
-                child: const Text(
-                  style: TextStyle(color: MyColors.designlyDarkBlue),
-                  'Set Alert',
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Alert Price'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter an alert price';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _alertPrice = double.parse(value!);
+                  },
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyColors.designlyOrange,
+                  ),
+                  onPressed: _showAlert,
+                  child: const Text(
+                    style: TextStyle(color: MyColors.designlyDarkBlue),
+                    'Set Alert',
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

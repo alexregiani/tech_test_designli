@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
-import 'dart:math';
 
 void main() async {
   final server = await HttpServer.bind(InternetAddress.anyIPv4, 8080);
@@ -18,6 +17,7 @@ void main() async {
 void handleWebSocket(WebSocket socket) {
   print('Client connected');
   Set<String> subscribedSymbols = {};
+  Map<String, double> prices = {};
 
   socket.listen(
     (message) {
@@ -28,42 +28,36 @@ void handleWebSocket(WebSocket socket) {
             decoded['type'] == 'subscribe' &&
             decoded['symbol'] != null) {
           subscribedSymbols.add(decoded['symbol']);
+          prices[decoded['symbol']] = 50; // Start from 150
           print('Subscribed to: ${decoded['symbol']}');
         }
       } catch (e) {
         print('Error processing message: $e');
       }
     },
-    onDone: () {
-      print('Client disconnected');
-    },
-    onError: (error) {
-      print('Error: $error');
-    },
+    onDone: () => print('Client disconnected'),
+    onError: (error) => print('Error: $error'),
   );
 
   Timer.periodic(Duration(seconds: 3), (timer) {
-    if (subscribedSymbols.isNotEmpty) {
-      for (final symbol in subscribedSymbols) {
-        final random = Random();
-        final data = {
-          "data": [
-            {
-              "p":
-                  double.parse((random.nextDouble() * 1000).toStringAsFixed(2)),
-              "s": symbol,
-              "t": DateTime.now().millisecondsSinceEpoch,
-              "v": double.parse((random.nextDouble() * 100).toStringAsFixed(6)),
-              "c": ["1", "2"]
-            }
-          ],
-          "type": "trade"
-        };
+    for (final symbol in subscribedSymbols) {
+      prices[symbol] = (prices[symbol] ?? 150.0) + 30.0; // Increase by 30
 
-        final jsonString = jsonEncode(data);
-        socket.add(jsonString);
-        print('Sent: $jsonString');
-      }
+      final data = {
+        "data": [
+          {
+            "p": prices[symbol]!,
+            "s": symbol,
+            "t": DateTime.now().millisecondsSinceEpoch,
+            "v": 100.0,
+            "c": ["1", "2"]
+          }
+        ],
+        "type": "trade"
+      };
+
+      socket.add(jsonEncode(data));
+      print('Sent: ${jsonEncode(data)}');
     }
   });
 }
