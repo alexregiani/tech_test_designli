@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
+import 'package:tech_test_designli/presentation/graph_screen/widgets/line_chart.dart';
 
 class GraphScreenProviderWrapper extends StatelessWidget {
   const GraphScreenProviderWrapper({super.key});
@@ -31,8 +32,14 @@ class GraphScreen extends StatelessWidget {
         ),
         backgroundColor: MyColors.designlyOrange,
       ),
-      backgroundColor: MyColors.designlyDarkBlue,
-      body: const Column(),
+      body: Center(
+        child: SizedBox(
+          height: 300,
+          child: MyLineChart(
+            isShowingMainData: true,
+          ),
+        ),
+      ),
     );
   }
 }
