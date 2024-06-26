@@ -32,6 +32,7 @@ class GraphScreen extends StatelessWidget {
         backgroundColor: MyColors.designlyOrange,
       ),
       backgroundColor: MyColors.designlyDarkBlue,
+      body: const Column(),
     );
   }
 }

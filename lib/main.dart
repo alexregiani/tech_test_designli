@@ -8,6 +8,7 @@ import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/init_bootsrapper.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/presentation/add_alert_screen/bloc/add_alert_bloc.dart';
+import 'package:tech_test_designli/presentation/graph_screen/bloc/stock_financials_bloc.dart';
 
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc_company_stock/bloc_company_stock_bloc.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc_trades_real_time/trades_real_time_bloc.dart';
@@ -27,6 +28,9 @@ void main() {
         ),
         BlocProvider(
           create: (context) => sl<TradesRealTimeBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<StockFinancialsBloc>(),
         ),
       ],
       child: const MyApp(),
