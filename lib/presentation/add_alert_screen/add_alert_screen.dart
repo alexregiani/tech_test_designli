@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
-import 'package:tech_test_designli/presentation/add_alert_screen/bloc/add_alert_bloc.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc_trades_real_time/trades_real_time_bloc.dart';
 
 class AddAlertScreen extends StatelessWidget {
@@ -45,7 +44,7 @@ class StockAlertForm extends StatefulWidget {
 class StockAlertFormState extends State<StockAlertForm> {
   @override
   void initState() {
-    context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
+    // context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
     super.initState();
   }
 
@@ -79,8 +78,8 @@ class StockAlertFormState extends State<StockAlertForm> {
               TextButton(
                 child: const Text('Confirm'),
                 onPressed: () {
-                  BlocProvider.of<AddAlertBloc>(context).add(
-                    AddAlertTriggerEvent(
+                  BlocProvider.of<TradesRealTimeBloc>(context).add(
+                    SetAlertEvent(
                       symbol: _selectedStock!,
                       alertPrice: _alertPrice!,
                     ),
@@ -100,9 +99,9 @@ class StockAlertFormState extends State<StockAlertForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddAlertBloc, AddAlertState>(
+    return BlocListener<TradesRealTimeBloc, TradesRealTimeState>(
       listener: (context, state) {
-        if (state is AddAlertTriggeredState) {
+        if (state is AlertSetState) {
           final symbol = state.symbol;
           final alertPrice = state.alertPrice;
           ScaffoldMessenger.of(context).showSnackBar(

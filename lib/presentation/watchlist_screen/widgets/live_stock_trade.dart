@@ -19,7 +19,6 @@ class LiveStockTrade extends StatefulWidget {
 class _LiveStockTradeState extends State<LiveStockTrade> {
   @override
   void initState() {
-    context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
     super.initState();
   }
 

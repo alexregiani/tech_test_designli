@@ -14,6 +14,7 @@ class TradesRealTimeBloc
     required this.realTimeTradesUseCase,
   }) : super(TradesRealTimeInitialState()) {
     on<TradesRealTimeTriggerEvent>(_onGetTradesRealTime);
+    on<SetAlertEvent>(_onSetAlert);
   }
   Future<void> _onGetTradesRealTime(
     TradesRealTimeTriggerEvent event,
@@ -23,9 +24,26 @@ class TradesRealTimeBloc
       emit(TradesLoadingState());
       await emit.forEach(
         realTimeTradesUseCase.tradesRealTime(),
-        onData: (trades) {
-          // debugPrint('print $trades');
+        onData: (Map<String, TradesRealTimeEntity> trades) {
           _errorCount = 0;
+
+          // Check for triggered alerts
+          for (final entry in _alerts.entries) {
+            final symbol = entry.key;
+            final alertPrice = entry.value;
+            if (trades.containsKey(symbol) &&
+                trades[symbol]!.lastPrice >= alertPrice) {
+              emit(
+                AlertTriggeredState(
+                  alertPrice: alertPrice,
+                  symbol: symbol,
+                  triggerPrice: trades[symbol]!.lastPrice,
+                ),
+              );
+              _alerts.remove(symbol);
+            }
+          }
+
           return TradesRealTimeSuccessState(tradesRealTime: trades);
         },
         onError: (error, stackTrace) {
@@ -41,7 +59,13 @@ class TradesRealTimeBloc
     }
   }
 
-  int _errorCount = 0;
-  final int _errorThreshold = 10;
+  void _onSetAlert(SetAlertEvent event, Emitter<TradesRealTimeState> emit) {
+    _alerts[event.symbol] = event.alertPrice;
+    emit(AlertSetState(symbol: event.symbol, alertPrice: event.alertPrice));
+  }
+
   final RealTimeTradesUseCase realTimeTradesUseCase;
+  final Map<String, double> _alerts = {};
+  int _errorCount = 0;
+  static const int _errorThreshold = 3;
 }

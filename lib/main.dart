@@ -43,6 +43,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
+
     return MaterialApp.router(
       routerConfig: router,
       title: 'Tech Test Designli',

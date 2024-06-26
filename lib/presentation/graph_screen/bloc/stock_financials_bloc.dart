@@ -39,8 +39,11 @@ class StockFinancialsBloc extends Bloc<StockFinancialsEvent, GraphState> {
       final customException = DioExceptionHandler.handle(e);
       emit(StockFinancialsFailureState(error: customException.error));
     } catch (e) {
-      emit(StockFinancialsFailureState(
-          error: 'An unexpected error occurred: $e'));
+      emit(
+        StockFinancialsFailureState(
+          error: 'An unexpected error occurred: $e',
+        ),
+      );
     }
   }
 
