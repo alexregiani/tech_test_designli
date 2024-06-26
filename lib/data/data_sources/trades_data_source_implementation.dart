@@ -14,6 +14,7 @@ import 'package:tech_test_designli/data/models/company_stock_model.dart';
 import 'package:tech_test_designli/data/models/graph/basic_financials_model.dart';
 import 'package:tech_test_designli/data/models/trades_real_time_model.dart';
 import 'package:tech_test_designli/domain/use_cases/stock_company_use_case.dart';
+import 'package:tech_test_designli/domain/use_cases/stock_financials_use_case.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TradesDataSourceImplementation implements TradesDataSource {
@@ -23,6 +24,7 @@ class TradesDataSourceImplementation implements TradesDataSource {
   final Duration _reconnectDelay = const Duration(seconds: 5);
   bool _isConnected = false;
   late StreamController<Map<String, TradesRealTimeModel>> _streamController;
+  static const apiUrl = 'https://finnhub.io/api/v1';
 
   @override
   Stream<Map<String, TradesRealTimeModel>> tradesRealTimeNetwork() {
@@ -40,7 +42,7 @@ class TradesDataSourceImplementation implements TradesDataSource {
         try {
           await _connect();
         } on WebSocketChannelException catch (e) {
-          debugPrint('webSocket channel exception $e');
+          debugPrint('WebSocket channel exception $e');
           _isConnected = false;
           await Future<void>.delayed(_reconnectDelay);
           continue;
@@ -116,7 +118,7 @@ class TradesDataSourceImplementation implements TradesDataSource {
     required ParamsStockCompany params,
   }) async {
     final url =
-        'https://finnhub.io/api/v1/quote?symbol=${params.symbol}&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+        '${_configService.httpUrl}/quote?symbol=${params.symbol}&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
 
     try {
       final dio = Dio();
@@ -133,9 +135,11 @@ class TradesDataSourceImplementation implements TradesDataSource {
   }
 
   @override
-  Future<BasicFinancialsModel> fetchFinancialsNetwork() async {
+  Future<BasicFinancialsModel> fetchStockFinancialsNetwork({
+    required ParamsStockFinancials params,
+  }) async {
     final url =
-        'https://finnhub.io/api/v1/stock/metric?symbol=AAPL&metric=all&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+        '${_configService.httpUrl}/stock/metric?symbol=${params.symbol}&metric=all&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
     try {
       final dio = Dio();
       final response = await dio.get<dynamic>(url);
