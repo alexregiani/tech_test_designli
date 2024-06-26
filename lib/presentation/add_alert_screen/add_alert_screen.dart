@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
 import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/presentation/add_alert_screen/bloc/add_alert_bloc.dart';
+import 'package:tech_test_designli/presentation/watchlist_screen/bloc_trades_real_time/trades_real_time_bloc.dart';
 
 class AddAlertProviderWrapper extends StatelessWidget {
   const AddAlertProviderWrapper({super.key});
@@ -44,12 +45,17 @@ class AddAlertScreen extends StatelessWidget {
 
 class StockAlertForm extends StatefulWidget {
   const StockAlertForm({super.key});
-
   @override
   StockAlertFormState createState() => StockAlertFormState();
 }
 
 class StockAlertFormState extends State<StockAlertForm> {
+  @override
+  void initState() {
+    context.read<TradesRealTimeBloc>().add(TradesRealTimeTriggerEvent());
+    super.initState();
+  }
+
   final _formKey = GlobalKey<FormState>();
   String? _selectedStock;
   double? _alertPrice;

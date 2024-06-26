@@ -11,6 +11,7 @@ import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/core/typedefs.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
 import 'package:tech_test_designli/data/models/company_stock_model.dart';
+import 'package:tech_test_designli/data/models/graph/basic_financials_model.dart';
 import 'package:tech_test_designli/data/models/trades_real_time_model.dart';
 import 'package:tech_test_designli/domain/use_cases/stock_company_use_case.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -122,6 +123,24 @@ class TradesDataSourceImplementation implements TradesDataSource {
       final response = await dio.get<dynamic>(url);
 
       final result = CompanyStockModel.fromJson(response.data as JSON);
+      debugPrint(result.toString());
+      return result;
+    } on DioException catch (e) {
+      throw DioExceptionHandler.handle(e);
+    } catch (e) {
+      throw CustomException('An unexpected error occurred: $e');
+    }
+  }
+
+  @override
+  Future<BasicFinancialsModel> fetchFinancialsNetwork() async {
+    final url =
+        'https://finnhub.io/api/v1/stock/metric?symbol=AAPL&metric=all&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+    try {
+      final dio = Dio();
+      final response = await dio.get<dynamic>(url);
+
+      final result = BasicFinancialsModel.fromJson(response.data as JSON);
       debugPrint(result.toString());
       return result;
     } on DioException catch (e) {

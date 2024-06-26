@@ -14,7 +14,6 @@ class WatchlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CompanyStockBloc>().add(AppleStockTriggerEvent());
     context.read<CompanyStockBloc>().add(BinanceStockTriggerEvent());
-
     return Scaffold(
       backgroundColor: MyColors.designlyDarkBlue,
       appBar: AppBar(
