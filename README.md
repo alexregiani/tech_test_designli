@@ -20,10 +20,23 @@ BLoC pattern is used for state management, ensuring a reactive and efficient app
 Fully working with go_router
 
 ## Networking
-it implements both WebSocket and traditional http.
+it implements both WebSocket (for live trades) and traditional http (historical data)
+
+## Environment variables
+The .env.example has a token environment variable to be filled
+
+## Server configuration
+To easily switch between mock up and real server go to 
+lib/core/server_configuration_service.dart
+and set the desired boolean flag, the mock server is set to increment in a predictable manner, 
+perfect to the set alert for price stock feature, a mock server was also necessary 
+because of constantly reaching the api requests limit.
+
+## Platform
+The app was tested on Pixel 8 API 34, it is highly recommended to use
+the same device in the AVD, or another Android device, other platforms not tested.
 
 ## Getting Started
-I have created a mock Web Socket Server for testing purposes
 - follow these steps:
     1. Open the terminal and run mock_ws.dart located at lib/core/mock_ws/lib/mock_ws.dart 
     2. Run the app on the AVD (tested on Pixel 8 API 34)
