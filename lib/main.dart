@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tech_test_designli/core/bloc_observer.dart';
 import 'package:tech_test_designli/core/get_it/get_it_injection.dart';
 import 'package:tech_test_designli/core/go_router.dart';
@@ -12,8 +13,9 @@ import 'package:tech_test_designli/presentation/graph_screen/bloc/stock_financia
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc_company_stock/bloc_company_stock_bloc.dart';
 import 'package:tech_test_designli/presentation/watchlist_screen/bloc_trades_real_time/trades_real_time_bloc.dart';
 
-void main() {
-  InitBootstrapper.init();
+void main() async {
+  await dotenv.load(fileName: '.env.example');
+  await InitBootstrapper.init();
   Bloc.observer = SimpleBlocObserver();
 
   runApp(

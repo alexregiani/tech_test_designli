@@ -4,9 +4,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tech_test_designli/core/configuration_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tech_test_designli/core/custom_exception.dart';
 import 'package:tech_test_designli/core/dio_exception_handler.dart';
+import 'package:tech_test_designli/core/server_configuration_service.dart';
 import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/core/typedefs.dart';
 import 'package:tech_test_designli/data/data_sources/trades_data_source.dart';
@@ -19,12 +20,12 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 class TradesDataSourceImplementation implements TradesDataSource {
   TradesDataSourceImplementation(this._configService);
-  final ConfigurationService _configService;
+  final ServerConfigurationService _configService;
   WebSocketChannel? _channel;
   final Duration _reconnectDelay = const Duration(seconds: 5);
   bool _isConnected = false;
   late StreamController<Map<String, TradesRealTimeModel>> _streamController;
-  static const apiUrl = 'https://finnhub.io/api/v1';
+  final token = dotenv.env['FINNHUB_API_TOKEN'];
 
   @override
   Stream<Map<String, TradesRealTimeModel>> tradesRealTimeNetwork() {
@@ -115,7 +116,7 @@ class TradesDataSourceImplementation implements TradesDataSource {
     required ParamsStockCompany params,
   }) async {
     final url =
-        '${_configService.httpUrl}/quote?symbol=${params.symbol}&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+        '${_configService.httpUrl}/quote?symbol=${params.symbol}&token=$token';
 
     try {
       final dio = Dio();
@@ -136,7 +137,7 @@ class TradesDataSourceImplementation implements TradesDataSource {
     required ParamsStockFinancials params,
   }) async {
     final url =
-        '${_configService.httpUrl}/stock/metric?symbol=${params.symbol}&metric=all&token=cpt1s1hr01qpk40rpu40cpt1s1hr01qpk40rpu4g';
+        '${_configService.httpUrl}/stock/metric?symbol=${params.symbol}&metric=all&token=$token';
     try {
       final dio = Dio();
       final response = await dio.get<dynamic>(url);
