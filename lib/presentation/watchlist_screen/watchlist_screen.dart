@@ -26,7 +26,7 @@ class WatchlistScreen extends StatelessWidget {
             SnackBar(
               duration: const Duration(seconds: 5),
               content: Text(
-                'Your alert for the $symbol stock has reached $alertPrice',
+                'Your alert for the $symbol stock has reached \$$alertPrice',
               ),
             ),
           );
