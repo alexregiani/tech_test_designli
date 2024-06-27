@@ -70,6 +70,8 @@ class TradesRealTimeBloc
   }
 
   void _checkAlerts(Emitter<TradesRealTimeState> emit) {
+    final triggeredAlerts = <String>[];
+
     for (final entry in _alerts.entries) {
       final symbol = entry.key;
       final alertPrice = entry.value;
@@ -82,8 +84,12 @@ class TradesRealTimeBloc
             triggerPrice: _currentTrades[symbol]!.lastPrice,
           ),
         );
-        _alerts.remove(symbol);
+        triggeredAlerts.add(symbol);
       }
+    }
+
+    for (final symbol in triggeredAlerts) {
+      _alerts.remove(symbol);
     }
   }
 }
