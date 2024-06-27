@@ -12,19 +12,20 @@ part 'stock_financials_state.dart';
 class StockFinancialsBloc extends Bloc<StockFinancialsEvent, GraphState> {
   StockFinancialsBloc({required this.stockFinancialsUseCase})
       : super(StockFinancialsInitialState()) {
-    on<StockFinancialsTriggerEvent>(_onBasicFinancials);
+    on<StockFinancialsAppleTriggerEvent>(_onBasicFinancials);
   }
 
   Future<void> _onBasicFinancials(
-    StockFinancialsTriggerEvent event,
+    StockFinancialsAppleTriggerEvent event,
     Emitter<GraphState> emit,
   ) async {
     emit(StockFinancialsLoadingState());
 
     try {
+      final symbol = event.symbol;
       final result = await stockFinancialsUseCase.stockFinancials(
         ParamsStockFinancials(
-          symbol: 'AAPL',
+          symbol: symbol,
         ),
       );
       final eps = result.series.annual.eps;

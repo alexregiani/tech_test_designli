@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tech_test_designli/core/go_router.dart';
 import 'package:tech_test_designli/core/my_theme.dart';
+import 'package:tech_test_designli/core/stocks_symbol_enum.dart';
 import 'package:tech_test_designli/presentation/graph_screen/bloc/stock_financials_bloc.dart';
 import 'package:tech_test_designli/presentation/graph_screen/widgets/line_chart.dart';
 
@@ -21,7 +22,11 @@ class GraphScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<StockFinancialsBloc>().add(StockFinancialsTriggerEvent());
+    context.read<StockFinancialsBloc>().add(
+          StockFinancialsAppleTriggerEvent(
+            symbol: StocksSymbol.apple.symbol,
+          ),
+        );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -40,7 +45,9 @@ class GraphScreen extends StatelessWidget {
         child: Column(
           children: [
             const Gap(50),
-            const Text('Earnings per Share AAPL'),
+            Text(
+                style: Theme.of(context).textTheme.displayMedium,
+                'Earnings per Share ${StocksSymbol.apple.symbol}'),
             SizedBox(
               height: 300,
               child: BlocBuilder<StockFinancialsBloc, GraphState>(
